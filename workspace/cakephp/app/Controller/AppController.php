@@ -57,9 +57,9 @@ class AppController extends Controller {
             ),
             'authenticate' => array(
                 'Form' => array(
-                    // 'passwordHasher' => 'Blowfish',
+                    'passwordHasher' => 'Blowfish',
                     // if you want to customize the fields for logging in
-                    // 'fields'=>array('username'=>'email','password'=>'password')
+                    'fields'=>array('username'=>'email','password'=>'password')
                 )
             )
         )
