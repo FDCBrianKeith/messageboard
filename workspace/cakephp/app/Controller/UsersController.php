@@ -9,6 +9,19 @@ class UsersController extends AppController {
         $this->Auth->allow("login","register");
     }
 
+    public function index() {
+        $id = $this->Auth->user('id'); 
+        $currentUser = $this->User->findById($id);
+        if(!$currentUser['User']['image']){
+            $path = '/app/webroot/img/pfp.png';
+            $currentUser['User']['image'] = $path;
+        }else{
+            $currentUser['User']['image'] = '/'.$currentUser['User']['image'];
+        }
+        $currentUser['User']['age'] = ($currentUser['User']['birthdate'])?$this->getAgeToday($currentUser['User']['birthdate']):0;
+        $this->set('user', $currentUser['User']);
+    }
+
     public function login() {
         
         if ($this->request->is('post')) {
@@ -41,5 +54,12 @@ class UsersController extends AppController {
 
     public function thankyou() {
         
+    }
+
+    public function getAgeToday($birthdate){
+        $date = new DateTime($birthdate);
+        $now = new DateTime();
+        $interval = $now->diff($date);
+        return $interval->y;
     }
 }

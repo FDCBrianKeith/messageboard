@@ -1,57 +1,38 @@
-<!-- File: /app/View/Posts/index.ctp -->
-
-
-
-<h1>Blog posts</h1>
-<?php echo $this->Html->link(
-    'Add User',
-    array('controller' => 'users', 'action' => 'add')
-); ?>
-
-<?php if($currentUser['id']): ?>
-<?php echo $this->Html->link(
-    'Logout',
-    array('controller' => 'users', 'action' => 'logout')
-); endif;?>
-
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Edit</th>
-        <th>Created</th>
-    </tr>
+<div class="container">
+    <h1>User Profile</h1>
     
-    <!-- Here is where we loop through our $posts array, printing out post info -->
-    <?php foreach ($users as $user): ?>
-    <tr>
-        <td><?php echo $user['User']['id']; ?></td>
-        <td>
-            <?php echo $user['User']['username']
-            ?>
-        </td>
-        <td>
+    <div style="display: flex; align-items: center">
+        <div style="max-width: 200px; margin-right: 1rem">
+            <?php 
+                echo $this->Html->image($user['image'], [
+                    'alt' => 'User Image',
+                    'id' => 'user-image',
+                    'class' => 'img-thumbnail',
+                    'style' => 'object-fit: cover;',
+                    'escape' => false
+                ]); ?>
+        </div>
+        <div>
             <?php
-                echo $this->Form->postLink(
-                    'Delete',
-                    array('action' => 'delete', $user['User']['id']),
-                    array('confirm' => 'Are you sure?')
-                );
-            ?>
-            <?php
-                echo $this->Html->link(
-                    'Edit',
-                    array('action' => 'edit', $user['User']['id'])
-                );
-            ?>
-        </td>
-        <td><?php echo $user['User']['created']; ?></td>
-    </tr>
-    <?php endforeach; ?>
+                $birthdate =  ($user['birthdate'])?date("F jS, Y", strtotime(($user['birthdate']))):'';
+                echo "<h4>" . h($user['name']) .",<span>   ".h($user['age'])."</span></h4>";
+                echo "<p>Email: " . h($user['email']) . "</p>";
+                echo "<p>Gender: " . h($user['gender']) . "</p>";
+                echo "<p>Birthdate: " .$birthdate. "</p>";
+                echo "<p>Joined: " . date("F jS, Y", strtotime(($user['created']))) . "</p>";
+                echo "<p>Last Joined: " .date("F jS, Y", strtotime(($user['modified']))) . "</p>";
 
-    <?php echo $this->Paginator->numbers(); ?>
+            ?>
+        </div>
+    </div>
+    <button class="btn my-4">
+        <?php echo $this->Html->link('Update', ['controller' => 'Users', 'action' => 'edit']) ?>
+    </button>
+    <div>
+        <p>Hobby:</p>
+        <?php
+            echo "<p>" . h($user['hobby']) . "</p>";
+        ?>
+    </div>
     
-    <?php unset($users); ?>
-
-    
-</table>
+</div>
