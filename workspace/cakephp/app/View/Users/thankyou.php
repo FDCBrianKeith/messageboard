@@ -2,7 +2,7 @@
     <div class="text-center">
         <h1>Thank you for registering</h1>
         <button class="nav-item btn">
-            Back to homepage
+            <?php echo $this->Html->link('Back to homepage', ['controller' => 'Messages', 'action' => 'index'], ['class' => 'nav-link']) ?>
         </button>
     </div>
 </div>
