@@ -31,13 +31,13 @@
             'value' => h($user['name'])
         ));
         echo $this->Form->input('email',array('label' => 'Email','class'=>'form-control my-1', 'value' => h($user['email']) ));
-        echo $this->Form->input('dob', array('label' => 'Date of Birth', 'class' => 'datepicker', 'value' => $user['birthdate'] ?? ''));
+        echo $this->Form->input('dob', array('label' => 'Date of Birth', 'class' => 'datepicker form-control', 'value' => $user['birthdate'] ?? ''));
         echo $this->Form->radio('gender',  ['Male'=>'Male', 'Female'=>'Female'],['value' => $user['gender'] ?? '']);
         echo $this->Form->input('hobby',array('label' => 'Hobby','class'=>'form-control','value' => h($user['hobby']) ?? ''));
         ?>
     </fieldset>
     <?php 
-        echo $this->Form->button('Update',array('class' => 'btn btn-primary text-right', 'type' => 'submit'));  
+        echo $this->Form->button('Update',array('class' => 'my-2 btn btn-primary text-right', 'type' => 'submit'));  
         echo $this->Form->end() 
     ?>
 </div>
