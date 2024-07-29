@@ -14,9 +14,7 @@
         <?php echo $this->element('noauth-navbar') ?>
     <?php endif; ?> 
     <?php if ($this->Session->check('Message.flash')): ?>
-        <div class="alert alert-primary" role="alert">
         <?php echo $this->Flash->render(); ?>
-        </div>
     <?php endif; ?>
     <?php echo $this->fetch('content'); ?>
 </body>
