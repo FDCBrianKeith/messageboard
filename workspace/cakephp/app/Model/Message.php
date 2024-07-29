@@ -41,4 +41,12 @@ class Message extends AppModel {
         )
     );
 
+    public $validate = array(
+        'message' => array(
+            'Not Empty' => array(
+                'rule' => 'notBlank',
+                'message' => 'Please enter your message',
+            ),
+        ),
+    );
 }
