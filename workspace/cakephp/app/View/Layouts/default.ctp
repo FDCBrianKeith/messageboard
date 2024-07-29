@@ -8,6 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body class="container">
+    <?php if (AuthComponent::user('id')): ?>
+        <?php echo $this->element('navbar') ?>
+    <?php else: ?>
+        <?php echo $this->element('noauth-navbar') ?>
+    <?php endif; ?> 
     <?php if ($this->Session->check('Message.flash')): ?>
         <div class="alert alert-primary" role="alert">
         <?php echo $this->Flash->render(); ?>
