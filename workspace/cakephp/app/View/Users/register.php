@@ -9,7 +9,7 @@
       <?php 
         echo $this->Form->input('email',array('label' => 'Email','class' => 'form-control')); 
         echo $this->Form->input('password',array('label' => 'Password','class' => 'form-control')); 
-        echo $this->Form->input('password_confirmation',array('label' => 'Confirm Password','class' => 'form-control')); 
+        echo $this->Form->input('password_confirmation',array('type' => 'password','label' => 'Confirm Password','class' => 'form-control')); 
     ?>
     <div class="text-right">
         <?php echo $this->Form->button('Register',array('class' => 'btn btn-primary text-right', 'type' => 'submit'));  
