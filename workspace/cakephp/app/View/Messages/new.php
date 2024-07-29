@@ -22,15 +22,6 @@
 
 <script>
     const data = <?php echo json_encode($users); ?>;
-    const options = data.map((d,key) => {
-        return {
-            id: d.User.id,
-            text: `${d.User.email}`,
-            html: `<div class="">${d.User.email}</div>`,  
-            title: d.User.email
-        }
-    })
-
     $('#select-option').select2({
         ajax: {
             url: '<?php echo $this->Html->url(['controller' => 'Messages', 'action' => 'ajaxGetUsers'])?>',
@@ -44,7 +35,11 @@
                         return {
                             id: d.User.id,
                             text: `${d.User.email}`,
-                            html: `<div class="">${d.User.email}</div>`,  
+                            html: `
+                                <div class="">
+                                    ${d.User.image?`<img class="mr-1" width="40" src=/cakephp/${encodeURI(d.User.image)}>`:''}
+                                    ${d.User.email}
+                                </div>`,  
                             title: d.User.email
                         }
                     })
