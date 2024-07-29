@@ -57,6 +57,12 @@ class User extends AppModel {
                 'message' => 'Passwords does not match'
             )
         ),
+        'newPassword' => array(
+            'Not Empty' => array(
+                'rule' => 'notBlank',
+                'message' => 'Please enter your password',
+            ),
+        ),
         'password_confirmation' => array(
             'Not Empty' => array(
                 'rule' => 'notBlank',

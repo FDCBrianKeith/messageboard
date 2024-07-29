@@ -28,6 +28,7 @@
     <button class="btn my-4">
         <?php echo $this->Html->link('Update', ['controller' => 'Users', 'action' => 'edit']) ?>
     </button>
+    <a href="/cakephp/users/changepassword" class="btn btn-warning">Change password</a>
     <div>
         <p>Hobby:</p>
         <?php
