@@ -41,7 +41,8 @@
     }
 </style>
 <div>
-    <h1>Message Details</h1>
+    <h3>Message Details:</h3>
+    <h5 class="display-5"><?php echo h($recipient['User']['name']) ?></h5>
     <div style="display: flex; justify-content: end">
         <div style="width: 50%; margin-bottom: 1rem; text-align: right;">
             <?php $this->Form->create('Message'); 
@@ -60,7 +61,7 @@
             <?php if ($id != $message['Message']['sender_id']): ?>
                 <div class="message-tile rounded">
             <?php else: ?>
-                <div class="message-tile rounded message-tile-reverse">
+                <div class="message-tile rounded message-tile-reverse bg-light">
             <?php endif; ?>
                 <div class="img-container">
                     <?php

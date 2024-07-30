@@ -23,8 +23,11 @@ class MessagesController extends AppController {
 			'order' => array('Message.created' => 'desc'),
 			'limit' => 10,
 		);
+        $this->User->recursive = -1;
+		$recipient = $this->User->findById($recipientId);
 		$messages = $this->paginate('Message');
-		$this->set(compact('messages','id','recipientId'));
+		$this->log($recipient);
+		$this->set(compact('messages','id','recipientId', 'recipient'));
 	}
 
     public function ajaxGetUsers() {
@@ -103,4 +106,4 @@ class MessagesController extends AppController {
 		}
 	}
 
-}
+	}
