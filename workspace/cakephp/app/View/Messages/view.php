@@ -46,7 +46,7 @@
         <div style="width: 50%; margin-bottom: 1rem; text-align: right;">
             <?php $this->Form->create('Message'); 
             echo $this->Form->input('message',array('label' => false,'class' => 'form-control','id' => 'message-box'));
-            echo $this->Form->button('Reply',array('label' => 'Password','class' => 'reply-btn btn btn-primary text-right mt-2'));  
+            echo $this->Form->button('Reply Message',array('label' => 'Password','class' => 'reply-btn btn btn-primary text-right mt-2'));  
             ?>
         </div>
     </div>
@@ -226,6 +226,25 @@
         return <?php echo $this->Paginator->counter('{:page}'); ?>;
     }
 
+    var minimizedEls = $('.content');
+    minimizedEls.each(function(){
+        var t = $(this).text();        
+        if(t.length < 100) return;
+        $(this).html(
+            t.substring(0,100)+'<span>... </span><a href="#" class="more">More</a>'+
+            '<span style="display:none;">'+ t.slice(25,t.length)+' <a href="#" class="less">Less</a></span>'
+        );
+    })
+
+    $('a.more', minimizedEls).click(function(event){
+        event.preventDefault();
+        $(this).hide().prev().hide();
+        $(this).next().show();        
+    });
     
+    $('a.less', minimizedEls).click(function(event){
+        event.preventDefault();
+        $(this).parent().hide().prev().show().prev().show();    
+    });
     
 </script>
