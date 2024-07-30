@@ -177,6 +177,7 @@
     const deleteMessage = (msg) => {
         const currentPage = getCurrentPage();
         const recipientId = <?php echo ($recipientId); ?>;
+        const userId = <?php echo ($id); ?>;
         $.ajax({
             url: '<?php echo $this->Html->url(['controller' => 'Messages', 'action' => 'ajaxDeleteMessage']); ?>',
             data: {
@@ -191,22 +192,16 @@
                 if(message.success){
                     $(`#message_${msg}`).fadeOut();
                     if(message.nextMessage){
+                        const type = (userId == message.nextMessage.Message.sender_id)?'Sender':'Recipient';
+                        const img = message.nextMessage['Sender']['image'] ?? 'app/webroot/img/pfp.png';
                         const newMessageTile = `
                             <div class="message" id="message_${message.nextMessage.Message.id}">
                                 <div class="d-flex justify-content-end m-1">
                                     <button class="btn btn-danger" id="delete-btn" onclick="deleteMessage(${message.nextMessage.Message.id})">Delete</button>
                                 </div>
-                                <div class="message-tile message-tile-reverse">
+                                <div class="message-tile ${type === 'Sender' ? 'message-tile-reverse' : ''}">
                                     <div class="img-container">
-                                        <?php
-                                            $type = 'Sender';
-                                            $img = $message[$type]['image'] ?? 'app/webroot/img/pfp.png';
-                                            echo $this->Html->image('/'.$img, [
-                                                'alt' => 'User Image',
-                                                'id' => 'user-image',
-                                                'class' => 'img-thumbnail'
-                                            ]); 
-                                        ?>
+                                        <img src="/cakephp/${encodeURI(img)}" alt="User Image" id="user-image" class="img-thumbnail">
                                     </div>
                                     <div class="message-section">
                                         <p>${message.nextMessage.Message.message}</p>
