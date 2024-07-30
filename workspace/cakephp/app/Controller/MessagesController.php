@@ -24,7 +24,6 @@ class MessagesController extends AppController {
 			'limit' => 10,
 		);
 		$messages = $this->paginate('Message');
-		$this->log($messages);
 		$this->set(compact('messages','id','recipientId'));
 	}
 
@@ -68,6 +67,39 @@ class MessagesController extends AppController {
 				'success' => false,
 				'message' => 'Message not sent',
 			));
+		}
+	}
+
+	public function ajaxDeleteMessage(){
+		$this->layout = false;
+		$this->autoRender = false;
+		if($this->request->is('post')){
+			$this->log($this->request->query);
+			$this->log($this->request->params);
+			$data = $this->request->data;
+			$id = $this->Auth->user('id'); 
+			$recipientId = $data['recipientId'];
+			$conditions = array(
+				'Message.recipient_id' => array($recipientId,$id),
+				'Message.sender_id' => array($recipientId,$id),
+			);
+			$nextMessage = $this->Message->find(
+				'all',
+				array(
+					'conditions' => $conditions,
+					'limit' => 10,
+					'page' => $data['currentPage']+1,
+					'order' => array('Message.created' => 'desc'),
+				)
+			);
+			$flag = $this->Message->delete($data['id']);
+			if($flag){
+				return json_encode(array(
+					'success' => true,
+					'message' => 'Message deleted successfully',
+					'nextMessage' => (count($nextMessage) > 0)?$nextMessage[0]:null
+				));
+			}
 		}
 	}
 

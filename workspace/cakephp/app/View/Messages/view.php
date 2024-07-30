@@ -54,6 +54,9 @@
     <div id="messages">
     <?php foreach ($messages as $key=>$message): ?>
         <div class="message" id="message_<?php echo $message['Message']['id'] ?>">
+            <div class="d-flex justify-content-end m-1">
+                <button class="btn btn-danger" id="delete-btn" onclick="deleteMessage(<?php echo $message['Message']['id'] ?>)">Delete</button>
+            </div>
             <?php if ($id != $message['Message']['sender_id']): ?>
                 <div class="message-tile rounded">
             <?php else: ?>
@@ -73,8 +76,7 @@
                 <div class="d-flex align-items-start flex-column w-100 mx-4 ">
                     <p class="content" id="content_<?php echo $key ?>">
                         <?php 
-                            $msgContent = $message['Message']['message'];
-                            
+                            $msgContent = $message['Message']['message'];     
                             echo h($msgContent);
                         ?>
                     </p>
@@ -140,6 +142,9 @@
                 const messagesDiv = document.getElementById('messages');
                 const newMessageTile = `
                     <div class="message" id="message_${message.data.Message.id}">
+                        <div class="d-flex justify-content-end m-1">
+                            <button class="btn btn-danger" id="delete-btn" onclick="deleteMessage(${message.data.Message.id})">Delete</button>
+                        </div>
                         <div class="message-tile message-tile-reverse">
                             <div class="img-container">
                                 <?php
@@ -169,16 +174,58 @@
         })
     })
 
-    const getMessages = () => {
-        const data = $.ajax({
-            url: '<?php echo $this->Html->url(['controller' => 'Messages', 'action' => 'ajaxGetMessages']); ?>',
-            data: {},
-            type: 'GET',
+    const deleteMessage = (msg) => {
+        const currentPage = getCurrentPage();
+        const recipientId = <?php echo ($recipientId); ?>;
+        $.ajax({
+            url: '<?php echo $this->Html->url(['controller' => 'Messages', 'action' => 'ajaxDeleteMessage']); ?>',
+            data: {
+                id: msg,
+                currentPage: currentPage,
+                recipientId: recipientId
+            },
+            type: 'POST',
             success: function(data){
-                messages = JSON.parse(data);
+                const message = JSON.parse(data);
+                console.log(message);
+                if(message.success){
+                    $(`#message_${msg}`).fadeOut();
+                    if(message.nextMessage){
+                        const newMessageTile = `
+                            <div class="message" id="message_${message.nextMessage.Message.id}">
+                                <div class="d-flex justify-content-end m-1">
+                                    <button class="btn btn-danger" id="delete-btn" onclick="deleteMessage(${message.nextMessage.Message.id})">Delete</button>
+                                </div>
+                                <div class="message-tile message-tile-reverse">
+                                    <div class="img-container">
+                                        <?php
+                                            $type = 'Sender';
+                                            $img = $message[$type]['image'] ?? 'app/webroot/img/pfp.png';
+                                            echo $this->Html->image('/'.$img, [
+                                                'alt' => 'User Image',
+                                                'id' => 'user-image',
+                                                'class' => 'img-thumbnail'
+                                            ]); 
+                                        ?>
+                                    </div>
+                                    <div class="message-section">
+                                        <p>${message.nextMessage.Message.message}</p>
+                                        <p class="message-section-date">July 23, 2024.</p>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                        $('#messages').append(newMessageTile);
+                    }
+                }
             }
         })
     }
 
+    const getCurrentPage = () => {
+        return <?php echo $this->Paginator->counter('{:page}'); ?>;
+    }
+
+    
     
 </script>
