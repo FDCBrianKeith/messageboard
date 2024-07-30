@@ -12,6 +12,22 @@ class MessagesController extends AppController {
         $this->set(compact('users'));
     }
 
+	public function view($recipientId=null) {
+		$id = $this->Auth->user('id'); 
+		$conditions = array(
+			'Message.recipient_id' => array($recipientId,$id),
+			'Message.sender_id' => array($recipientId,$id),
+		);
+		$this->paginate = array(
+			'conditions' => $conditions,
+			'order' => array('Message.created' => 'desc'),
+			'limit' => 10,
+		);
+		$messages = $this->paginate('Message');
+		$this->log($messages);
+		$this->set(compact('messages','id','recipientId'));
+	}
+
     public function ajaxGetUsers() {
 		$this->layout = false;
 		$this->autoRender = false;
