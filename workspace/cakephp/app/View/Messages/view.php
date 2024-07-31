@@ -99,7 +99,8 @@
                     __("Back"),
                     array(
                         'tag' => 'button',
-                        'class' => 'btn mx-1'
+                        'class' => 'btn mx-1',
+                        'id' => 'see-less'
                         )
                     );
                 }
@@ -112,7 +113,8 @@
                     __("See more"),
                     array(
                         'tag' => 'button',
-                        'class' => 'btn mx-1'
+                        'class' => 'btn mx-1',
+                        'id' => 'see-more'
                     )
                 );
             }
@@ -188,12 +190,12 @@
                 recipientId: recipientId
             },
             type: 'POST',
-            success: function(data){
+            success: function(data) {
                 const message = JSON.parse(data);
                 console.log(message);
-                if(message.success){
+                if (message.success) {
                     $(`#message_${msg}`).fadeOut();
-                    if(message.nextMessage){
+                    if (message.nextMessage) {
                         const type = (userId == message.nextMessage.Message.sender_id)?'Sender':'Recipient';
                         const img = message.nextMessage['Sender']['image'] ?? 'app/webroot/img/pfp.jpg';
                         const newMessageTile = `
@@ -213,7 +215,7 @@
                             </div>`;
 
                         $('#messages').append(newMessageTile);
-                    }
+                    } 
                 }
             }
         })
@@ -224,22 +226,22 @@
     }
 
     var minimizedEls = $('.content');
-    minimizedEls.each(function(){
+    minimizedEls.each(function() {
         var t = $(this).text();        
-        if(t.length < 100) return;
+        if (t.length < 100) return;
         $(this).html(
             t.substring(0,100)+'<span>... </span><a href="#" class="more">More</a>'+
             '<span style="display:none;">'+ t.slice(25,t.length)+' <a href="#" class="less">Less</a></span>'
         );
     })
 
-    $('a.more', minimizedEls).click(function(event){
+    $('a.more', minimizedEls).click(function(event) {
         event.preventDefault();
         $(this).hide().prev().hide();
         $(this).next().show();        
     });
     
-    $('a.less', minimizedEls).click(function(event){
+    $('a.less', minimizedEls).click(function(event) {
         event.preventDefault();
         $(this).parent().hide().prev().show().prev().show();    
     });
