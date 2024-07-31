@@ -11,7 +11,7 @@
         echo $this->Form->input('password',array('label' => 'Password','class' => 'form-control')); 
         echo $this->Form->input('password_confirmation',array('type' => 'password','label' => 'Confirm Password','class' => 'form-control')); 
     ?>
-    <div class="text-right">
+    <div class="text-right mt-2">
         <?php echo $this->Form->button('Register',array('class' => 'btn btn-primary text-right', 'type' => 'submit'));  
         echo $this->Form->end() ?>
     </div>
