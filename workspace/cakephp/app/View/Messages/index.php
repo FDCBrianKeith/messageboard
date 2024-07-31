@@ -60,7 +60,7 @@
 <script>
     let page = 1;
     const userId = <?php echo AuthComponent::user('id'); ?>;
-    function loadMessages(page){
+    function loadMessages(page) {
         console.log(userId);
         const data = {
             'page': page,
@@ -90,7 +90,7 @@
                             <div class="message" id="message_${msg.Message.recipient_id}" style="margin: 25px 0">
                             <div class="d-flex position-relative align-items-end justify-content-between mb-2">
                                 <h5 class="text-secondary mb-0" style="font-size: 18px">${msg.User.name}</h5>
-                                <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteConversation(${msg.Message.recipient_id})">Delete</button>
+                                <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteConversation(${msg.Message.recipient_id},${msg.Message.sender_id})">Delete</button>
                             </div>
                             <a href="/cakephp/messages/view/${msg.User.id}">
                                 <div class="message-tile rounded row h-100" style="min-height: 120px">
@@ -121,15 +121,9 @@
         })
     }
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         console.log('page loaded');
         loadMessages(1);
-
-        // $('#submit-search').on('click',function(){
-        //     page = 1;
-        //     $('#messages').empty();
-        //     loadMessages(page);
-        // })
 
         $('#search-form').on('submit', function(e) {
             e.preventDefault();
@@ -161,6 +155,26 @@
             minute: "numeric", 
             hour12: true 
         });
+    }
+
+    function deleteConversation(recipientId, senderId) {
+        $(`#message_${recipientId}`).fadeOut();
+        const data = {
+            recipient: recipientId,
+            sender: senderId
+        }
+        $.ajax({
+            url: '<?php echo $this->Html->url(['controller' => 'Messages', 'action' => 'ajaxDeleteConversation']); ?>',
+            data: data,
+            type: 'POST',
+            success: function(data) {
+                console.log(data);
+                const message = JSON.parse(data);
+                if (message.success) {
+                    $(`#message_${recipientId}`).fadeOut();
+                }
+            }
+        })
     }
     
 </script>

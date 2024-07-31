@@ -198,4 +198,34 @@ class MessagesController extends AppController {
 		}
 	}
 
+	public function ajaxDeleteConversation() {
+		$this->layout = false;
+		$this->autoRender = false;
+		if ($this->request->is('post')) {
+			$data = $this->request->data;
+			$flag = $this->Message->deleteAll(array(
+				'OR' => array(
+					array(
+						'AND' => array(
+							'recipient_id' => $data['recipient'],
+							'sender_id' => $data['sender']
+						)
+					),
+					array(
+						'AND' => array(
+							'recipient_id' => $data['sender'],
+							'sender_id' => $data['recipient']
+						)
+					)
+				)
+			));
+			if ($flag) {
+				return json_encode(array(
+					'success' => true,
+					'message' => 'Message deleted successfully',
+				));
+			}
+		}
+	}
+
 }
