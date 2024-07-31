@@ -37,7 +37,7 @@
                             text: `${d.User.email}`,
                             html: `
                                 <div class="">
-                                    ${d.User.image?`<img class="mr-1" width="40" src=/cakephp/${encodeURI(d.User.image)}>`:''}
+                                    ${d.User.image?`<img class="mr-1" width="40" src=/cakephp/${encodeURI(d.User.image)}>`:'<img class="mr-1" width="40" src=/cakephp/app/webroot/img/pfp.jpg>'}
                                     ${d.User.email}
                                 </div>`,  
                             title: d.User.email
