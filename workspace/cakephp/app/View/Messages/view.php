@@ -192,7 +192,6 @@
             type: 'POST',
             success: function(data) {
                 const message = JSON.parse(data);
-                console.log(message);
                 if (message.success) {
                     $(`#message_${msg}`).fadeOut();
                     if (message.nextMessage) {

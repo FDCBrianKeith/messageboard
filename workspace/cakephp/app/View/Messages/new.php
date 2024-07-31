@@ -60,7 +60,6 @@
 
     $('#select-option').on('change', function() {
         var selectedValue = $(this).val();
-        console.log(selectedValue);
     });
 
     $('.send-btn').click(function(){

@@ -61,7 +61,6 @@
     let page = 1;
     const userId = <?php echo AuthComponent::user('id'); ?>;
     function loadMessages(page) {
-        console.log(userId);
         const data = {
             'page': page,
             'search': document.getElementById('search-query').value,
@@ -72,7 +71,6 @@
             type: 'GET',
             success: function(fetchedData){
                 const data = JSON.parse(fetchedData);
-                console.log(data);
                 if(data.success){
                     if (page === 1) {
                         $("#see-less").hide();
@@ -122,7 +120,6 @@
     }
 
     $(document).ready(function() {
-        console.log('page loaded');
         loadMessages(1);
 
         $('#search-form').on('submit', function(e) {
@@ -168,7 +165,6 @@
             data: data,
             type: 'POST',
             success: function(data) {
-                console.log(data);
                 const message = JSON.parse(data);
                 if (message.success) {
                     $(`#message_${recipientId}`).fadeOut();
