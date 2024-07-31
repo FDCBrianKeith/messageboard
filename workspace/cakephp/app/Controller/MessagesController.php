@@ -28,7 +28,6 @@ class MessagesController extends AppController {
 				);
 				$this->User->recursive = -1;
 				$messages = $this->paginate('Message');
-				$this->log($recipient);
 				$success = true;
 				$this->set(compact('messages','id','recipientId', 'recipient', 'success'));
 			} else {
@@ -89,8 +88,6 @@ class MessagesController extends AppController {
 		$this->layout = false;
 		$this->autoRender = false;
 		if ($this->request->is('post')) {
-			$this->log($this->request->query);
-			$this->log($this->request->params);
 			$data = $this->request->data;
 			$id = $this->Auth->user('id'); 
 			$recipientId = $data['recipientId'];
@@ -169,7 +166,6 @@ class MessagesController extends AppController {
 			
 			// Executing the query
 			$messages = $this->Message->find('all', $query);
-			$this->log($messages);
 
 			foreach ($messages as $key => $message) {
 				if ($message['Message']['recipient_id'] === $currentUserId) {
