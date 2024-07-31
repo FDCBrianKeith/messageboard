@@ -41,10 +41,10 @@
 <div>
     <div class="head d-flex justify-content-between">
         <h1>Message List</h1>
-        <div class="form d-flex  align-items-center">
+        <form class="form d-flex  align-items-center" id="search-form">
             <input type="text" label="Search for message" class="form-control" id="search-query">
-            <button class="btn btn-secondary ml-3" id="submit-search">Search</button>
-        </div>
+            <button type="submit" class="btn btn-secondary ml-3" id="submit-search">Search</button>
+        </form>
     </div>
     <div style="text-align: right; margin-bottom: 1rem">
         <a href="messages/new" class="btn btn-primary">New Message</a>
@@ -124,6 +124,19 @@
     $(document).ready(function(){
         console.log('page loaded');
         loadMessages(1);
+
+        // $('#submit-search').on('click',function(){
+        //     page = 1;
+        //     $('#messages').empty();
+        //     loadMessages(page);
+        // })
+
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+            page = 1;
+            $('#messages').empty();
+            loadMessages(page);
+        });
 
         $('#see-more').on('click',function(){
             $('#messages').empty();

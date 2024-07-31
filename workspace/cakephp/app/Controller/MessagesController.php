@@ -151,6 +151,12 @@ class MessagesController extends AppController {
 				),
 				'conditions' => array(
 					'Message.id = (SELECT MAX(um2.id) FROM messages um2 WHERE (um2.sender_id, um2.recipient_id) IN ((Message.sender_id, Message.recipient_id), (Message.recipient_id, Message.sender_id)))',
+					'AND' => array (
+						'OR' => array(
+							'Sender.name LIKE' => '%'.$searchQuery.'%',
+							'User.name LIKE' => '%'.$searchQuery.'%'
+						)
+					),
 					'OR' => array(
 						'Message.sender_id' => $currentUserId,
 						'Message.recipient_id' => $currentUserId,
