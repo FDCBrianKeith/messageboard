@@ -7,7 +7,7 @@
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-<body class="container">
+<body>
     <?php if (AuthComponent::user('id')): ?>
         <?php echo $this->element('navbar') ?>
     <?php else: ?>
@@ -16,6 +16,8 @@
     <?php if ($this->Session->check('Message.flash')): ?>
         <?php echo $this->Flash->render(); ?>
     <?php endif; ?>
-    <?php echo $this->fetch('content'); ?>
+    <div class="container">
+        <?php echo $this->fetch('content'); ?>
+    </div>
 </body>
 </html>
