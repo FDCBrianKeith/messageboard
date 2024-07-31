@@ -13,7 +13,7 @@ class UsersController extends AppController {
         $id = $this->Auth->user('id'); 
         $currentUser = $this->User->findById($id);
         if (!$currentUser['User']['image']) {
-            $path = '/app/webroot/img/pfp.png';
+            $path = '/app/webroot/img/pfp.jpg';
             $currentUser['User']['image'] = $path;
         } else {
             $currentUser['User']['image'] = '/'.$currentUser['User']['image'];
@@ -55,7 +55,7 @@ class UsersController extends AppController {
             $id = $this->Auth->user('id'); 
             $currentUser = $this->User->findById($id);
             if (!$currentUser['User']['image']) {
-                $path = '/app/webroot/img/pfp.png';
+                $path = '/app/webroot/img/pfp.jpg';
                 $currentUser['User']['image'] = $path;
             }
             if ($this->request->is('post') || $this->request->is('put')) {

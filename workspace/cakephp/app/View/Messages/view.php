@@ -68,7 +68,7 @@
                 <div class="img-container">
                     <?php
                         $type = ($id == $message['Message']['sender_id'])?'Sender':'Recipient';
-                        $img = $message['Sender']['image']?$message['Sender']['image']:'app/webroot/img/pfp.png';
+                        $img = $message['Sender']['image']?$message['Sender']['image']:'app/webroot/img/pfp.jpg';
                         echo $this->Html->image('/'.$img, [
                             'alt' => 'User Image',
                             'id' => 'user-image',
@@ -151,7 +151,7 @@
                             <div class="img-container">
                                 <?php
                                     $type = 'Sender';
-                                    $img = $message[$type]['image'] ?? 'app/webroot/img/pfp.png';
+                                    $img = $message[$type]['image'] ?? 'app/webroot/img/pfp.jpg';
                                     echo $this->Html->image('/'.$img, [
                                         'alt' => 'User Image',
                                         'id' => 'user-image',
@@ -195,7 +195,7 @@
                     $(`#message_${msg}`).fadeOut();
                     if(message.nextMessage){
                         const type = (userId == message.nextMessage.Message.sender_id)?'Sender':'Recipient';
-                        const img = message.nextMessage['Sender']['image'] ?? 'app/webroot/img/pfp.png';
+                        const img = message.nextMessage['Sender']['image'] ?? 'app/webroot/img/pfp.jpg';
                         const newMessageTile = `
                             <div class="message" id="message_${message.nextMessage.Message.id}">
                                 <div class="d-flex justify-content-end m-1">
