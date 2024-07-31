@@ -34,9 +34,11 @@ class MessagesController extends AppController {
 		$this->layout = false;
 		$this->autoRender = false;
 		$this->User->recursive = -1;
+		$id = $this->Auth->user('id'); 
 		$conditions = array(
             'conditions' => array(
-                'User.email LIKE' => '%' . $this->request->query('q') . '%'
+                'User.email LIKE' => '%' . $this->request->query('q') . '%',
+				'User.id !=' => $id
             )
         );
         $users = $this->User->find('all', $conditions);
@@ -106,4 +108,117 @@ class MessagesController extends AppController {
 		}
 	}
 
+	public function ajaxGetLists(){
+		$this->layout = false;
+		$this->autoRender = false;
+		$this->Message->recursive = -1;
+		$limit = 10;
+		if($this->request->is('ajax')){
+			$currentUserId = $this->Auth->user('id');
+			$data = $this->request->query;
+			$searchQuery = (isset($data['search']))?$data['search']:'';
+			$page = (isset($data['page']))?$data['page']:1;
+			// $query = array(
+			// 	'fields' => array('DISTINCT Message.recipient_id, Message.sender_id', 'User.*', 'Sender.*','Message.message', 'Message.created'),
+			// 	'joins' => array(
+			// 		array(
+			// 			'table' => 'users',
+			// 			'alias' => 'User',
+			// 			'type' => 'INNER',
+			// 			'conditions' => array(
+			// 				'User.id = Message.recipient_id',
+			// 			)
+			// 		),
+			// 		array(
+			// 			'table' => 'users',
+			// 			'alias' => 'Sender',
+			// 			'type' => 'INNER',
+			// 			'conditions' => array(
+			// 				'Sender.id = Message.sender_id',
+			// 			)
+			// 		),
+			// 		array(
+			// 			'table' => '(SELECT recipient_id,sender_id, MAX(created) AS max_timestamp FROM messages GROUP BY recipient_id,sender_id)',
+			// 			'alias' => 'MessageJoin',
+			// 			'type' => 'INNER',
+			// 			'conditions' => array(
+			// 				'Message.created = MessageJoin.max_timestamp'
+			// 			)
+			// 		)
+			// 	),
+			// 	'conditions' => array(
+			// 		'User.name LIKE' => '%'.$searchQuery.'%',
+			// 		'OR' => array(
+			// 			'Message.sender_id' => $currentUserId,
+			// 			'Message.recipient_id' => $currentUserId,
+			// 		)
+			// 	),
+			// 	'limit' => $limit,
+			// 	'page' => $page,
+			// 	'order' => array('Message.created' => 'desc'),
+			// );
+
+			$query = array(
+				'fields' => array('Message.*', 'User.*', 'Sender.*'), // Adjusted to only include the sender
+				'joins' => array(
+					array(
+						'table' => 'users',
+						'alias' => 'User',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'User.id = Message.recipient_id', // Join on sender
+					)
+					),
+					array(
+						'table' => 'users',
+						'alias' => 'Sender',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'Sender.id = Message.sender_id', // Join on sender
+						)
+					)
+				),
+				'conditions' => array(
+					'Message.id = (SELECT MAX(um2.id) FROM messages um2 WHERE (um2.sender_id, um2.recipient_id) IN ((Message.sender_id, Message.recipient_id), (Message.recipient_id, Message.sender_id)))',
+					'OR' => array(
+						'Message.sender_id' => $currentUserId,
+						'Message.recipient_id' => $currentUserId,
+					)
+				),
+				'limit' => $limit,
+				'page' => $page,
+				'order' => array('Message.created' => 'desc'),
+			);
+			
+			// Executing the query
+			$messages = $this->Message->find('all', $query);
+			$this->log($messages);
+
+			foreach ($messages as $key=>$message) {
+				if($message['Message']['recipient_id'] === $currentUserId){
+					$messages[$key]['User'] = $message['Sender'];
+				}
+			}
+
+			{
+				unset($query['limit']);
+				unset($query['page']);
+				$count = $this->Message->find('count',$query);
+			}
+			if(count($messages) > 0){
+				return json_encode(array(
+					'success' => true,
+					'message' => 'Messages found',
+					'data' => $messages,
+					'totalPages' => ceil($count/$limit)
+				));
+			}else{
+				return json_encode(array(
+					'success' => false,
+					'message' => 'No messages found',
+				));
+			}
+		}
 	}
+
+}
