@@ -42,9 +42,20 @@ class UsersController extends AppController {
                 $this->Flash->success(__('The user has been saved'));
                 return $this->redirect(array('action' => 'thankyou'));
             }
-            $this->Flash->error(
-                __('The user could not be saved. Please, try again.')
-            );
+
+            if (count($this->User->validationErrors) > 0) {
+                $errorMessages = [];
+                foreach ($this->User->validationErrors as $field => $errors) {
+                    foreach ($errors as $error) {
+                        $errorMessages[] = htmlspecialchars($error);
+                    }
+                }
+    
+                $errorList = '<ul>' . implode('', array_map(fn($msg) => '<li>' . $msg . '</li>', $errorMessages)) . '</ul>';
+                $this->Flash->error(__($errorList));
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
         }
     }
 

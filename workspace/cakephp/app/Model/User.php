@@ -54,7 +54,7 @@ class User extends AppModel {
             ),
             'Match passwords' => array(
                 'rule' => 'matchPasswords',
-                'message' => 'Passwords does not match'
+                'message' => 'Password does not match'
             )
         ),
         'newPassword' => array(
