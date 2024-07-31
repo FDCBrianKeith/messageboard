@@ -4,7 +4,7 @@
         <?php echo $this->Form->create('User'); 
         echo $this->Form->input('email',array('label' => 'Email','class' => 'form-control')); 
         echo $this->Form->input('password',array('label' => 'Password','class' => 'form-control')); ?>
-        <div class="text-right">
+        <div class="text-right mt-2">
             <?php echo $this->Form->button('Login',array('label' => 'Password','class' => 'btn btn-primary text-right'));  
             echo $this->Form->end() ?>
         </div>
