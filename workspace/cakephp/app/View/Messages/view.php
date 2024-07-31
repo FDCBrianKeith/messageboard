@@ -41,8 +41,11 @@
     }
 </style>
 <div>
-    <h3>Message Details:</h3>
-    <h5 class="display-5"><?php echo h($recipient['User']['name']) ?></h5>
+    <h3>Message Details</h3>
+    <div class="alert alert-info" role="alert">
+        Conversation with: <span class="fw-semibold" style="font-weight: bold"><?php echo h($recipient['User']['name']) ?></span>
+    </div>
+    
     <div style="display: flex; justify-content: end">
         <div style="width: 50%; margin-bottom: 1rem; text-align: right;">
             <?php $this->Form->create('Message'); 
