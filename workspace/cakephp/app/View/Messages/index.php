@@ -51,7 +51,8 @@
     </div>
     <div id="messages">
     </div>
-    <div style="text-align: center">
+    <div style="text-align: center" class="mb-2">
+        <button id="see-less" class="btn">Back</button>
         <button id="see-more" class="btn btn-primary">See more</button>
     </div>
 </div>
@@ -73,7 +74,12 @@
                 const data = JSON.parse(fetchedData);
                 console.log(data);
                 if(data.success){
-                    if(page === data.totalPages){
+                    if (page === 1) {
+                        $("#see-less").hide();
+                    } else {
+                        $("#see-less").show();
+                    }
+                    if (page === data.totalPages) {
                         $('#see-more').hide();
                     }else{
                         $('#see-more').show();
@@ -95,7 +101,7 @@
                                         <div class="h-100 flex-grow-1 d-flex flex-column align-items-between justify-content-between">
                                             <p class="mb-0"><span class="text-secondary fw-light fs-5 ${(userId ===  msg.Message.sender_id)?'':'d-none'}">You: </span>${msg.Message.message}</p>
                                             <div class="">
-                                                <p class="message-section-date fw-light mb-0"><small>${new Date(msg.Message.created).toLocaleString("en-PH", { timeZone: "Asia/Manila" })}</small></p>
+                                                <p class="message-section-date fw-light mb-0"><small>${getReadableDate(msg.Message.created)}</small></p>
                                             </div>
                                         </div>
                                     </div>
@@ -118,6 +124,30 @@
     $(document).ready(function(){
         console.log('page loaded');
         loadMessages(1);
+
+        $('#see-more').on('click',function(){
+            $('#messages').empty();
+            loadMessages(++page);
+        })
+
+        $('#see-less').on('click',function(){
+            $('#messages').empty();
+            if (page > 1) {
+                loadMessages(--page);
+            }
+        })
     });
+
+    function getReadableDate(date) {
+        return new Date(date).toLocaleString("en-PH", { 
+            timeZone: "Asia/Manila", 
+            year: "numeric", 
+            month: "long", 
+            day: "numeric", 
+            hour: "numeric", 
+            minute: "numeric", 
+            hour12: true 
+        });
+    }
     
 </script>
