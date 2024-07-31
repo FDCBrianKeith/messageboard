@@ -14,20 +14,30 @@ class MessagesController extends AppController {
 
 	public function view($recipientId=null) {
 		$id = $this->Auth->user('id'); 
-		$conditions = array(
-			'Message.recipient_id' => array($recipientId,$id),
-			'Message.sender_id' => array($recipientId,$id),
-		);
-		$this->paginate = array(
-			'conditions' => $conditions,
-			'order' => array('Message.created' => 'desc'),
-			'limit' => 10,
-		);
-        $this->User->recursive = -1;
-		$recipient = $this->User->findById($recipientId);
-		$messages = $this->paginate('Message');
-		$this->log($recipient);
-		$this->set(compact('messages','id','recipientId', 'recipient'));
+		if ($recipientId) {
+			$recipient = $this->User->findById($recipientId);
+			if ($recipient) {
+				$conditions = array(
+					'Message.recipient_id' => array($recipientId,$id),
+					'Message.sender_id' => array($recipientId,$id),
+				);
+				$this->paginate = array(
+					'conditions' => $conditions,
+					'order' => array('Message.created' => 'desc'),
+					'limit' => 10,
+				);
+				$this->User->recursive = -1;
+				$messages = $this->paginate('Message');
+				$this->log($recipient);
+				$success = true;
+				$this->set(compact('messages','id','recipientId', 'recipient', 'success'));
+			} else {
+				$this->Flash->error(__('User not found'));
+				return $this->redirect(array('action' => 'index'));
+			}
+		} else {
+			return $this->redirect(array('action' => 'index'));
+		}
 	}
 
     public function ajaxGetUsers() {

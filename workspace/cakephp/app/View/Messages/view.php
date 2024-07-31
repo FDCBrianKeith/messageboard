@@ -45,7 +45,6 @@
     <div class="alert alert-info" role="alert">
         Conversation with: <span class="fw-semibold" style="font-weight: bold"><?php echo h($recipient['User']['name']) ?></span>
     </div>
-    
     <div style="display: flex; justify-content: end">
         <div style="width: 50%; margin-bottom: 1rem; text-align: right;">
             <?php $this->Form->create('Message'); 
@@ -119,7 +118,6 @@
             }
             ?>
         </div>
-
     </div>
 </div>
 
@@ -167,10 +165,10 @@
                             </div>
                         </div>
                     </div>`;
-                if(message.success){
+                if (message.success) {
                     messagesDiv.insertAdjacentHTML('afterbegin', newMessageTile);
                     const currentMessageCount = '<?php echo (count($messages)); ?>';
-                    if(currentMessageCount > 10){
+                    if (currentMessageCount > 10) {
                         $('#messages').children().last().remove();
                     }
                 }
